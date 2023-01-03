@@ -1,0 +1,81 @@
+---
+title: "Projet Analyse Exploratoire"
+author: "Oriane Berry et Clémence Lemeilleur"
+date: "2023-01-03"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Blablabla
+
+```{r}
+# Chargement des paquets + Ouverture du dataset
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+roller <- read.csv("./Dataset/roller_coasters.csv", header=TRUE)
+roller
+```
+
+## Camembert sur le seating type
+
+Blablabla
+
+```{r}
+
+rrr <- roller %>% group_by(seating_type) %>%
+  summarize(typeSie = table(seating_type)) 
+plot <- ggplot(rrr, aes(x = seating_type, y = typeSie))+geom_bar(stat="identity") + labs(title="Nombre d'attractions par type de sièges",x="seating_type", y="Nombre") + scale_y_continuous()
+plot
+```
+
+
+## Histogramme du nombre de loopings par parc
+
+Blablabla
+
+```{r}
+subRoller <- subset(roller, !is.na(num_inversions))
+fff <- subRoller %>% group_by(park) %>%
+  summarize(nbr = mean(num_inversions)) %>%
+  filter(nbr > 4)
+fff 
+ggplot(fff, aes(x=park, y = nbr)) + geom_bar(stat="identity")
+```
+
+
+## Nuage de points : nombre de loopings en fonction de la hauteur
+
+Blablabla
+
+```{r}
+
+```
+
+## Nuage de points : nombre de loopings en fonction de la longueur
+
+Blablabla
+
+```{r}
+
+```
+
+## Radar chart : axes : vitesse, hauteur, longueur, nbr loopings; Courbes : materiaux
+
+Blablabla
+
+```{r}
+```
+
+## Conclusion
+
+Blablabla
+
+## Annexes
+
+Le dataset utilisé a été trouvé sur Kaggle et se trouve dans le même fichier zip que ce rapport. 
