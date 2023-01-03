@@ -1,12 +1,15 @@
 ---
 title: "Projet Analyse Exploratoire"
-author: "Oriane Berry et Clémence Lemeilleur"
+author: "Oriane Berry et Clemence Lemeilleur"
 date: "2023-01-03"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## Introduction
@@ -14,24 +17,30 @@ knitr::opts_chunk$set(echo = TRUE)
 Blablabla
 
 ```{r}
-# Chargement des paquets + Ouverture du dataset
+# Chargement des paquets et Ouverture du dataset
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
-roller <- read.csv("./Dataset/roller_coasters.csv", header=TRUE)
+library(fmsb)
+roller <- read.csv("rollerCoasters.csv", header=TRUE)
 roller
 ```
 
-## Camembert sur le seating type
+## Histogramme sur le seating type
 
 Blablabla
 
 ```{r}
+#Regroupe les donnees par type de sieges et filtre les données nulles ou na
+subRRR <- subset(roller, seating_type != "na")
+rrr <- subRRR %>% group_by(seating_type) %>%
+  summarize(typeSie = table(seating_type))
 
-rrr <- roller %>% group_by(seating_type) %>%
-  summarize(typeSie = table(seating_type)) 
-plot <- ggplot(rrr, aes(x = seating_type, y = typeSie))+geom_bar(stat="identity") + labs(title="Nombre d'attractions par type de sièges",x="seating_type", y="Nombre") + scale_y_continuous()
-plot
+#Creer le graphique en barres
+plot <- ggplot(rrr, aes(x = seating_type, y = typeSie))+geom_col(aes(fill=seating_type),width=0.7)+ labs(title="Nombre dattractions par type de siege",x="Type de siege", y="Nombre dattractions") + scale_y_continuous()
+
+#Affiche le graphique horizontalement
+plot + coord_flip()
 ```
 
 
@@ -45,7 +54,7 @@ fff <- subRoller %>% group_by(park) %>%
   summarize(nbr = mean(num_inversions)) %>%
   filter(nbr > 4)
 fff 
-ggplot(fff, aes(x=park, y = nbr)) + geom_bar(stat="identity")
+ggplot(fff, aes(x=park, y = nbr)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90))
 ```
 
 
@@ -54,6 +63,10 @@ ggplot(fff, aes(x=park, y = nbr)) + geom_bar(stat="identity")
 Blablabla
 
 ```{r}
+subCloud <- subset(roller, !is.na(num_inversions))
+cloud <- subCloud %>% group_by(height) %>% 
+  summarize(loopings = mean(num_inversions))
+ggplot(cloud, aes(x=loopings, y=height))+geom_point() + xlab("Nombre de loopings")+ylab("Hauteur du manege")+scale_y_continuous(limits=c(0,150))+ geom_smooth(method="lm")+labs(title="Nombre de loopings en fonction de la hauteur des maneeges")
 
 ```
 
@@ -62,7 +75,9 @@ Blablabla
 Blablabla
 
 ```{r}
-
+cloudLen <- subCloud %>% group_by(length) %>% 
+  summarize(loopings = mean(num_inversions))
+ggplot(cloudLen, aes(x=loopings, y=length))+geom_point() + xlab("Nombre de loopings")+ylab("Longueur du manege")+ geom_smooth(method="lm")+labs(title="Nombre de loopings en fonction de la longueur des maneges")
 ```
 
 ## Radar chart : axes : vitesse, hauteur, longueur, nbr loopings; Courbes : materiaux
@@ -70,6 +85,13 @@ Blablabla
 Blablabla
 
 ```{r}
+subRadar <- subset(roller, !is.na(speed) & !is.na(height) & !is.na(length) & !is.na(num_inversions))
+radar <- subRadar  %>% group_by(material_type) %>%
+  summarize(Speed=mean(speed),
+            Height=mean(height),
+            Length=mean(length),
+            Loopings=mean(num_inversions))
+
 ```
 
 ## Conclusion
@@ -78,4 +100,4 @@ Blablabla
 
 ## Annexes
 
-Le dataset utilisé a été trouvé sur Kaggle et se trouve dans le même fichier zip que ce rapport. 
+Le dataset utilisé a ete trouve sur Kaggle et se trouve dans le meme fichier zip que ce rapport. 
