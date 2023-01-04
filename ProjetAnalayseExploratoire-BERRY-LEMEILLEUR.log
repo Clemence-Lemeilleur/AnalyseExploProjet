@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.9.6)  3 JAN 2023 20:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.9.15)  4 JAN 2023 08:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -519,8 +519,8 @@ l.11359 \end{verbatim}
                        
 Here is how much of TeX's memory you used:
  13454 strings out of 481239
- 195540 string characters out of 5920378
- 1174523 words of memory out of 5000000
+ 195540 string characters out of 5920377
+ 1174521 words of memory out of 5000000
  28350 multiletter control sequences out of 15000+600000
  558227 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191

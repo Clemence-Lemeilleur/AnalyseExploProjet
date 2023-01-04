@@ -22,6 +22,7 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(fmsb)
+library(viridis)
 roller <- read.csv("rollerCoasters.csv", header=TRUE)
 roller
 ```
@@ -51,9 +52,9 @@ Blablabla
 ```{r}
 subRoller <- subset(roller, !is.na(num_inversions))
 fff <- subRoller %>% group_by(park) %>%
-  summarize(nbr = mean(num_inversions)) %>%
-  filter(nbr > 4)
-fff 
+  summarize(nbr = mean(num_inversions))
+fff <- fff[order(-fff$nbr),]
+fff <- head(fff,10)
 ggplot(fff, aes(x=park, y = nbr)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90))
 ```
 
@@ -91,8 +92,34 @@ radar <- subRadar  %>% group_by(material_type) %>%
             Height=mean(height),
             Length=mean(length),
             Loopings=mean(num_inversions))
+radar <- subset(radar, !material_type=="na")
+radar
+
+radar <- column_to_rownames(radar, var = "material_type")
+max_values <- sapply(radar, max)
+min_values <- sapply(radar, min)
+radar <- rbind(max_values, min_values, radar)
+colors <- viridis(5)
+radarchart(radar, axistype=1 , 
+            #custom polygon
+            pcol=colors, plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", cglwd=0.8,
+            #custom labels
+            vlcex=1 )
+legend(x=1.2, y=1, legend = rownames(radar[-c(1,2),]), bty = "n", pch=20 , col=colors, cex=1.2, pt.cex=3)
 
 ```
+```{r} 
+ggplot(radar, aes(radar$material_type, Speed, fill = radar$material_type)) +
+  geom_polygon(color = "black") +
+  geom_text(aes(label = round(radar$Speed, 2)), vjust = -1, size = 3) +
+  scale_x_discrete(limits = c(radar$Speed,radar$Height,radar$Length,radar$Loopings)) +
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_minimal()
+```
+
+
 
 ## Conclusion
 
